@@ -1,0 +1,8 @@
+version: 2
+
+sources: 
+  - name: gre_sns 
+    schema: raw
+    tables:
+       - name: gre_sns_raw_data
+         description: "Raw data from GRE SNS source system"
