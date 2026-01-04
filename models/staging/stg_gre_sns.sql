@@ -1,0 +1,100 @@
+-- Staging model for GRE_SNS raw data with proper type casting
+-- Source: DEV_GRE_SNS.raw.GRE_SNS_RAW_DATA
+
+{{ config(
+    materialized='view'
+) }}
+
+WITH transformed AS (
+    SELECT
+        TRIM(CAST(country_code AS VARCHAR(255))) AS country_code,
+        TRIM(CAST(pid_code AS VARCHAR(255))) AS pid_code,
+        TRIM(CAST(composite_pid_code AS VARCHAR(255))) AS composite_pid_code,
+        TRIM(CAST(rule_name AS VARCHAR(255))) AS rule_name,
+        TRIM(CAST(rule_type AS VARCHAR(255))) AS rule_type,
+        TRIM(CAST(rule_pointer_name AS VARCHAR(255))) AS rule_pointer_name,
+        TRIM(CAST(rule_pointer_type AS VARCHAR(255))) AS rule_pointer_type,
+        TRIM(CAST(charge_code AS VARCHAR(255))) AS charge_code,
+        CAST(priority AS INTEGER) AS priority,
+        CAST(start_date AS DATE) AS start_date,
+        CAST(end_date AS DATE) AS end_date,
+        TRIM(CAST(fuel_type AS VARCHAR(255))) AS fuel_type,
+        TRIM(CAST(fuel_index_table AS VARCHAR(255))) AS fuel_index_table,
+        TRIM(CAST(pricing_status AS VARCHAR(255))) AS pricing_status,
+        TRIM(CAST(applicable_products AS VARCHAR(255))) AS applicable_products,
+        TRIM(CAST(destination_countries AS VARCHAR(255)))
+            AS destination_countries,
+        TRIM(CAST(origin_countries AS VARCHAR(255))) AS origin_countries,
+        TRIM(CAST(calculation_rule AS VARCHAR(255))) AS calculation_rule,
+        TRIM(CAST(charging_method AS VARCHAR(255))) AS charging_method,
+        TRIM(CAST(weight_unit AS VARCHAR(255))) AS weight_unit,
+        CAST(minimum_charge AS DECIMAL(18, 6)) AS minimum_charge,
+        CAST(maximum_charge AS DECIMAL(18, 6)) AS maximum_charge,
+        TRIM(CAST(value_type AS VARCHAR(255))) AS value_type,
+        TRIM(CAST(charge_value AS VARCHAR(255))) AS charge_value,
+        TRIM(CAST(charge_value_2 AS VARCHAR(255))) AS charge_value_2,
+        TRIM(CAST(free_units AS VARCHAR(255))) AS free_units,
+        TRIM(CAST(apply_if_fiscal_charges_exceed AS VARCHAR(255)))
+            AS apply_if_fiscal_charges_exceed,
+        TRIM(CAST(minimum_premium AS VARCHAR(255))) AS minimum_premium,
+        TRIM(CAST(premium_rate AS VARCHAR(255))) AS premium_rate,
+        TRIM(CAST(minimum_insured_value AS VARCHAR(255)))
+            AS minimum_insured_value,
+        TRIM(CAST(blanket_insurance AS VARCHAR(255))) AS blanket_insurance,
+        TRIM(CAST(apply_discount AS VARCHAR(255))) AS apply_discount,
+        TRIM(CAST(currency AS VARCHAR(255))) AS currency,
+        TRIM(CAST(owner_pid_code AS VARCHAR(255))) AS owner_pid_code,
+        TRIM(CAST(discounting_method AS VARCHAR(255))) AS discounting_method,
+        TRIM(CAST(discount_value AS VARCHAR(255))) AS discount_value,
+        TRIM(CAST(applicable_account AS VARCHAR(255))) AS applicable_account,
+        TRIM(CAST(source_pid AS VARCHAR(255))) AS source_pid,
+        TRIM(CAST(source_start_date AS VARCHAR(255))) AS source_start_date,
+        TRIM(CAST(source_end_date AS VARCHAR(255))) AS source_end_date
+    FROM {{ source('gre_sns', 'gre_sns_raw_data') }}
+)
+
+SELECT
+    {{ dbt_utils.generate_surrogate_key([
+        'country_code',
+        'pid_code',
+        'composite_pid_code',
+        'rule_name',
+        'rule_type',
+        'rule_pointer_name',
+        'rule_pointer_type',
+        'charge_code',
+        'priority',
+        'start_date',
+        'end_date',
+        'fuel_type',
+        'fuel_index_table',
+        'pricing_status',
+        'applicable_products',
+        'destination_countries',
+        'origin_countries',
+        'calculation_rule',
+        'charging_method',
+        'weight_unit',
+        'minimum_charge',
+        'maximum_charge',
+        'value_type',
+        'charge_value',
+        'charge_value_2',
+        'free_units',
+        'apply_if_fiscal_charges_exceed',
+        'minimum_premium',
+        'premium_rate',
+        'minimum_insured_value',
+        'blanket_insurance',
+        'apply_discount',
+        'currency',
+        'owner_pid_code',
+        'discounting_method',
+        'discount_value',
+        'applicable_account',
+        'source_pid',
+        'source_start_date',
+        'source_end_date'
+    ]) }} AS gre_sns_unique_key,
+    *
+FROM transformed
