@@ -1,0 +1,10 @@
+version: 2
+
+snapshots:
+  - name: sns_gre_sns
+    config:
+      target_schema: mart
+      strategy: check
+      unique_key: composite_key  
+      check_cols: all           
+      invalidate_hard_deletes: true

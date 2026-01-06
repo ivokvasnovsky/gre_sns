@@ -1,10 +1,3 @@
--- Staging model for GRE_SNS raw data with proper type casting
--- Source: DEV_GRE_SNS.raw.GRE_SNS_RAW_DATA
-
-{{ config(
-    materialized='view'
-) }}
-
 WITH transformed AS (
     SELECT
         TRIM(CAST(country_code AS VARCHAR(255))) AS country_code,
@@ -96,5 +89,7 @@ SELECT
         'source_start_date',
         'source_end_date'
     ]) }} AS gre_sns_unique_key,
+    '{{ invocation_id }}' AS dbt_batch_id,
+    {{ dbt.current_timestamp() }} AS dbt_loaded_at,
     *
 FROM transformed
