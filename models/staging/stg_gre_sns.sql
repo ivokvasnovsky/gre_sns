@@ -1,6 +1,6 @@
 WITH transformed AS (
     SELECT
-        TRIM(CAST(country_code AS VARCHAR(255))) AS country_code,
+        LEFT(TRIM(CAST(pid_code AS VARCHAR(255))),2) AS country_code,
         TRIM(CAST(pid_code AS VARCHAR(255))) AS pid_code,
         TRIM(CAST(composite_pid_code AS VARCHAR(255))) AS composite_pid_code,
         TRIM(CAST(rule_name AS VARCHAR(255))) AS rule_name,
@@ -90,6 +90,6 @@ SELECT
         'source_end_date'
     ]) }} AS gre_sns_unique_key,
     '{{ invocation_id }}' AS dbt_batch_id,
-    CURRENT_TIMESTAMP() AS dbt_loaded_at,
+    current_localtimestamp() AS dbt_loaded_at,
     *
 FROM transformed

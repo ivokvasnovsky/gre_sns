@@ -32,5 +32,13 @@ clean-targets:         # directories to be removed by `dbt clean`
 models:
   gre_sns:
     # Config indicated by + and applies to all files under models/example/
-    example:
-      +materialized: view
+    mart:
+      +materialized: table
+      schema: mart
+
+seeds:
+  gre_sns:
+    +schema: dim
+    +header: false
+    +column_types: 
+      country_code: varchar(2)
