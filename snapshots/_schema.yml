@@ -1,10 +1,11 @@
 version: 2
 
 snapshots:
-  - name: sns_gre_sns
+  - name: gre_sns_snapshot
+    description: "Snapshot of the GRE SNS staging table to track historical changes"
     config:
       target_schema: mart
       strategy: check
-      unique_key: composite_key  
+      unique_key: gre_sns_unique_key  
       check_cols: all           
-      invalidate_hard_deletes: true
+      hard_deletes: invalidate

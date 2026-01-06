@@ -90,6 +90,6 @@ SELECT
         'source_end_date'
     ]) }} AS gre_sns_unique_key,
     '{{ invocation_id }}' AS dbt_batch_id,
-    {{ dbt.current_timestamp() }} AS dbt_loaded_at,
+    CURRENT_TIMESTAMP() AS dbt_loaded_at,
     *
 FROM transformed
