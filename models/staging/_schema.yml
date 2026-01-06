@@ -1,0 +1,22 @@
+version: 2
+
+models:
+  - name: stg_gre_sns
+    description: "Staging table for GRE SNS data with cleaned and standardized fields"
+    columns:
+    - name: gre_sns_unique_key
+      description: "surrogate composite key created from all columns"
+      tests:
+        - not_null
+        - unique
+    - name: pid_code
+      description: "Product Identifier Code"
+      tests:
+        - not_null
+    - name: country_code
+      description: "Country code derived from PID code"
+      tests:
+        - not_null
+        - relation:
+            to: ref('dim_country')
+            column: country
